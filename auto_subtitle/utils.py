@@ -32,14 +32,15 @@ def format_timestamp(seconds: float, always_include_hours: bool = False):
 
 def write_srt(transcript: Iterator[dict], file: TextIO):
     for i, segment in enumerate(transcript, start=1):
-        print(
-            f"{i}\n"
-            f"{format_timestamp(segment['start'], always_include_hours=True)} --> "
-            f"{format_timestamp(segment['end'], always_include_hours=True)}\n"
-            f"{segment['text'].strip().replace('-->', '->')}\n",
-            file=file,
-            flush=True,
-        )
+        if segment['text'] != '':
+            print(
+                f"{i}\n"
+                f"{format_timestamp(segment['start'], always_include_hours=True)} --> "
+                f"{format_timestamp(segment['end'], always_include_hours=True)}\n"
+                f"{segment['text'].strip().replace('-->', '->')}\n",
+                file=file,
+                flush=True,
+            )
 
 
 def filename(path):

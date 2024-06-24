@@ -14,6 +14,7 @@ def main():
                         help="paths to video files to transcribe")
     parser.add_argument("--model", default="small",
                         choices=whisper.available_models(), help="name of the Whisper model to use")
+    parser.add_argument("--word_timestamps", type=str2bool, default=False, help="(experimental) extract word-level timestamps and refine the results based on them")
     parser.add_argument("--output_dir", "-o", type=str,
                         default=".", help="directory to save the outputs")
     parser.add_argument("--output_mkv", type=str2bool, default=False,
@@ -68,7 +69,7 @@ def main():
 
         if output_mkv:
             srt = ffmpeg.input(srt_path)
-            ffmpeg.output(srt, video, 'output.mkv', vcodec='copy', scodec='copy').run(quiet=False, overwrite_output=True)
+            ffmpeg.output(srt, video, out_path, vcodec='copy', scodec='copy').run(quiet=False, overwrite_output=True)
         else:
             ffmpeg.concat(
                 video.filter('subtitles', srt_path, force_style="OutlineColour=&H40000000,BorderStyle=3"), audio, v=1, a=1
